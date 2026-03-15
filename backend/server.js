@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const path = require("path");
 
 dotenv.config();
 
@@ -23,9 +24,18 @@ app.use('/api/departments', require('./routes/departmentRoutes'));
 app.use('/api/activity', require('./routes/activityRoutes'));
 app.use('/api/room-types', require('./routes/roomTypeRoutes'));
 
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
+// Serve React frontend in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running...');
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 
