@@ -1,0 +1,13 @@
+MongoDB connection error: MongoParseError: options usenewurlparser, useunifiedtopology are not supported
+    at parseOptions (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\node_modules\mongodb\lib\connection_string.js:272:15)
+    at new MongoClient (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\node_modules\mongodb\lib\mongo_client.js:67:61)
+    at NativeConnection.createClient (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:334:14)
+    at NativeConnection.openUri (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\node_modules\mongoose\lib\connection.js:1075:34)
+    at Mongoose.connect (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\node_modules\mongoose\lib\mongoose.js:471:15)
+    at connectDB (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\scripts\seedData.js:16:20)
+    at seedData (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\scripts\seedData.js:29:11)
+    at Object.<anonymous> (D:\FRONT END DEVELOPMENT\Faculty & Time Table Management\backend\scripts\seedData.js:76:1)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14)
+    at Object..js (node:internal/modules/cjs/loader:1893:10) {
+  errorLabelSet: Set(0) {}
+}
