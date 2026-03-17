@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
-import { Eye, EyeOff, Loader2, Mail, Lock, CalendarDays, BookOpen, Users } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Mail, Lock, CalendarDays, BookOpen, Users, ShieldCheck, GraduationCap } from 'lucide-react';
 import api from '../api';
 
 const Login = () => {
@@ -71,6 +71,14 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleDemoLogin = (selectedRole, demoEmail, demoPassword) => {
+    setRole(selectedRole);
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError('');
+    setSuccessMsg('');
   };
 
   return (
@@ -166,47 +174,87 @@ const Login = () => {
               </div>
             </form>
           ) : (
-            <form onSubmit={handleSubmit} className="login-form" noValidate>
-              <div className="input-group">
-                <label>Email Address</label>
-                <div className="input-wrapper">
-                  <Mail className="input-icon" size={20} />
-                  <input 
-                    type="email" 
-                    value={email}
-                    onChange={(e) => {setEmail(e.target.value); setError('');}}
-                    placeholder={`Enter your ${role} email`}
-                    required 
-                  />
+            <>
+              <form onSubmit={handleSubmit} className="login-form" noValidate>
+                <div className="input-group">
+                  <label>Email Address</label>
+                  <div className="input-wrapper">
+                    <Mail className="input-icon" size={20} />
+                    <input 
+                      type="email" 
+                      value={email}
+                      onChange={(e) => {setEmail(e.target.value); setError('');}}
+                      placeholder={`Enter your ${role} email`}
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <label>Password</label>
+                  <div className="input-wrapper">
+                    <Lock className="input-icon" size={20} />
+                    <input 
+                      type={showPassword ? "text" : "password"} 
+                      value={password}
+                      onChange={(e) => {setPassword(e.target.value); setError('');}}
+                      placeholder="Enter your password"
+                      required 
+                    />
+                    <button type="button" className="toggle-pwd-btn" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                  <div className="forgot-pwd-container">
+                    <button type="button" className="text-btn primary-text" onClick={() => { setIsForgotPassword(true); setError(''); setSuccessMsg(''); }}>
+                      Forgot Password?
+                    </button>
+                  </div>
+                </div>
+
+                <button type="submit" className="primary-btn" disabled={isLoading}>
+                  {isLoading ? <><Loader2 className="spinner" size={20} /> Signing in...</> : 'Sign In'}
+                </button>
+              </form>
+
+              {/* Demo Accounts Section */}
+              <div className="demo-accounts-section">
+                <div className="demo-title">
+                  <Users size={14} /> Demo Accounts
+                </div>
+                <div className="demo-cards-container">
+                  <div 
+                    className="demo-card admin-spec" 
+                    onClick={() => handleDemoLogin('admin', 'admin@college.edu', '123456')}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="demo-badge admin-badge">
+                        <ShieldCheck size={12} className="mr-1" /> Admin
+                      </div>
+                    </div>
+                    <div className="demo-card-info">
+                      <span><b>Email:</b> admin@college.edu</span>
+                      <span><b>Pass:</b> 123456</span>
+                    </div>
+                  </div>
+
+                  <div 
+                    className="demo-card faculty-spec" 
+                    onClick={() => handleDemoLogin('faculty', 'sam.anton@gmail.com', '123456')}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="demo-badge faculty-badge">
+                        <GraduationCap size={12} className="mr-1" /> Faculty
+                      </div>
+                    </div>
+                    <div className="demo-card-info">
+                      <span><b>Email:</b> sam.anton@gmail.com</span>
+                      <span><b>Pass:</b> 123456</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <div className="input-group">
-                <label>Password</label>
-                <div className="input-wrapper">
-                  <Lock className="input-icon" size={20} />
-                  <input 
-                    type={showPassword ? "text" : "password"} 
-                    value={password}
-                    onChange={(e) => {setPassword(e.target.value); setError('');}}
-                    placeholder="Enter your password"
-                    required 
-                  />
-                  <button type="button" className="toggle-pwd-btn" onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
-                <div className="forgot-pwd-container">
-                  <button type="button" className="text-btn primary-text" onClick={() => { setIsForgotPassword(true); setError(''); setSuccessMsg(''); }}>
-                    Forgot Password?
-                  </button>
-                </div>
-              </div>
-
-              <button type="submit" className="primary-btn" disabled={isLoading}>
-                {isLoading ? <><Loader2 className="spinner" size={20} /> Signing in...</> : 'Sign In'}
-              </button>
-            </form>
+            </>
           )}
         </div>
       </div>
@@ -621,6 +669,94 @@ const Login = () => {
           .desktop-header { display: block; text-align: center; margin-bottom: 1.5rem; }
           .desktop-header .title { font-size: 1.5rem; }
           .mobile-header { display: none; }
+        }
+
+        /* --- DEMO ACCOUNTS --- */
+        .demo-accounts-section {
+          margin-top: 2.5rem;
+          padding-top: 1.5rem;
+          border-top: 1px dashed #e2e8f0;
+        }
+        .demo-title {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #94a3b8;
+          margin-bottom: 1.25rem;
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+        .demo-title::before, .demo-title::after {
+          content: '';
+          height: 1px;
+          flex: 1;
+          background: #f1f5f9;
+        }
+        .demo-cards-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+        .demo-card {
+          background: #ffffff;
+          border: 1px solid #f1f5f9;
+          border-radius: 14px;
+          padding: 1rem;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          flex-direction: column;
+        }
+        .demo-card:hover {
+          background: #f8fafc;
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+          border-color: #cbd5e1;
+        }
+        .demo-badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.25rem 0.6rem;
+          border-radius: 6px;
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+        .mr-1 { margin-right: 0.25rem; }
+        .admin-badge {
+          background: #eff6ff;
+          color: #2563eb;
+        }
+        .faculty-badge {
+          background: #f5f3ff;
+          color: #7c3aed;
+        }
+        .demo-card-info {
+          font-size: 0.75rem;
+          color: #64748b;
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
+        }
+        .demo-card-info span {
+          display: block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .demo-card-info b {
+          color: #334155;
+          font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+          .demo-cards-container {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
     </div>
