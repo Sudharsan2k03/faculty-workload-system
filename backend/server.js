@@ -4,9 +4,6 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const path = require("path");
 
-
-connectDB();
-
 const app = express();
 
 app.use(cors({
@@ -41,6 +38,11 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+startServer();
